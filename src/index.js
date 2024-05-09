@@ -671,6 +671,9 @@ export default class Gantt {
             } else if (element.classList.contains('right')) {
                 is_resizing_right = true;
             } else if (element.classList.contains('bar-wrapper')) {
+                if (element.classList.contains('bar-not-draggable')) {
+                    return;
+                }
                 is_dragging = true;
             }
 

@@ -32,7 +32,9 @@
 				end: '2018-10-08',
 				name: 'Redesign website',
 				id: "Task 0",
-				progress: 20
+				progress: 20,
+        disable_move: true,
+        disable_resize: true,
 			},
 			{
 				start: '2018-10-03',
@@ -40,7 +42,7 @@
 				name: 'Write new content',
 				id: "Task 1",
 				progress: 5,
-				dependencies: 'Task 0'
+				dependencies: 'Task 0',
 			},
 			{
 				start: '2018-10-04',
@@ -75,13 +77,13 @@
 				dependencies: 'Task 4',
 				custom_class: 'bar-milestone'
 			},
-			{
-				start: '2014-01-05',
-				end: '2019-10-12',
-				name: 'Long term task',
-				id: "Task 6",
-				progress: 0
-			}
+			// {
+			// 	start: '2014-01-05',
+			// 	end: '2019-10-12',
+			// 	name: 'Long term task',
+			// 	id: "Task 6",
+			// 	progress: 0
+			// }
 		]
 		var gantt_chart = new Gantt(".gantt-target", tasks, {
 			on_click: function (task) {
@@ -96,7 +98,7 @@
 			on_view_change: function(mode) {
 				console.log(mode);
 			},
-			view_mode: 'Month',
+			view_mode: 'Day',
 			language: 'en'
 		});
 		console.log(gantt_chart);

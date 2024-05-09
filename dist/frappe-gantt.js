@@ -481,6 +481,10 @@ var Gantt = (function () {
         }
 
         prepare_values() {
+            // Lock features
+            this.disable_resize = this.task.disable_resize;
+            this.disable_move = this.task.disable_move;
+
             this.invalid = this.task.invalid;
             this.height = this.gantt.options.bar_height;
             this.x = this.compute_x();
@@ -495,7 +499,7 @@ var Gantt = (function () {
                     this.duration *
                     (this.task.progress / 100) || 0;
             this.group = createSVG('g', {
-                class: 'bar-wrapper ' + (this.task.custom_class || ''),
+                class: 'bar-wrapper ' + (this.task.custom_class || '') + (this.disable_move ? 'bar-not-draggable' : ''),
                 'data-id': this.task.id,
             });
             this.bar_group = createSVG('g', {
@@ -581,7 +585,7 @@ var Gantt = (function () {
         }
 
         draw_resize_handles() {
-            if (this.invalid) return;
+            if (this.invalid || this.disable_resize) return;
 
             const bar = this.$bar;
             const handle_width = 8;
@@ -630,7 +634,7 @@ var Gantt = (function () {
         }
 
         bind() {
-            if (this.invalid) return;
+            if (this.invalid || this.disable_move) return;
             this.setup_click_event();
         }
 
@@ -1699,6 +1703,9 @@ var Gantt = (function () {
                 } else if (element.classList.contains('right')) {
                     is_resizing_right = true;
                 } else if (element.classList.contains('bar-wrapper')) {
+                    if (element.classList.contains('bar-not-draggable')) {
+                        return;
+                    }
                     is_dragging = true;
                 }
 
