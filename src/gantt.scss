@@ -115,6 +115,10 @@ $handle-color: #ddd !default;
 				fill: darken($blue, 5);
 			}
 		}
+
+		&.bar-not-draggable {
+			cursor: not-allowed;
+		}
 	}
 
 	.lower-text, .upper-text {

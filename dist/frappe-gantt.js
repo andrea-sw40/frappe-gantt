@@ -637,7 +637,7 @@ var Gantt = (function () {
         }
 
         bind() {
-            if (this.invalid || this.disable_move) return;
+            if (this.invalid) return;
             this.setup_click_event();
         }
 
