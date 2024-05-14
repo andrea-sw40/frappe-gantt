@@ -499,7 +499,10 @@ var Gantt = (function () {
                     this.duration *
                     (this.task.progress / 100) || 0;
             this.group = createSVG('g', {
-                class: 'bar-wrapper ' + (this.task.custom_class || '') + (this.disable_move ? 'bar-not-draggable' : ''),
+                class:
+                    'bar-wrapper ' +
+                    (this.task.custom_class || '') +
+                    (this.disable_move ? ' bar-not-draggable' : ''),
                 'data-id': this.task.id,
             });
             this.bar_group = createSVG('g', {
@@ -1039,6 +1042,7 @@ var Gantt = (function () {
     }
 
     const VIEW_MODE = {
+        HOUR: 'Hour',
         QUARTER_DAY: 'Quarter Day',
         HALF_DAY: 'Half Day',
         DAY: 'Day',
@@ -1232,6 +1236,9 @@ var Gantt = (function () {
             } else if (view_mode === VIEW_MODE.YEAR) {
                 this.options.step = 24 * 365;
                 this.options.column_width = 120;
+            } else if (view_mode === VIEW_MODE.HOUR) {
+                this.options.step = 1;
+                this.options.column_width = 32;
             }
         }
 
@@ -1266,6 +1273,9 @@ var Gantt = (function () {
             } else if (this.view_is(VIEW_MODE.YEAR)) {
                 this.gantt_start = date_utils.add(this.gantt_start, -2, 'year');
                 this.gantt_end = date_utils.add(this.gantt_end, 2, 'year');
+            } else if (this.view_is(VIEW_MODE.HOUR)) {
+                this.gantt_start = date_utils.add(this.gantt_start, -1, 'day');
+                this.gantt_end = date_utils.add(this.gantt_end, 1, 'day');
             } else {
                 this.gantt_start = date_utils.add(this.gantt_start, -1, 'month');
                 this.gantt_end = date_utils.add(this.gantt_end, 1, 'month');
@@ -1518,6 +1528,7 @@ var Gantt = (function () {
                 last_date = date_utils.add(date, 1, 'year');
             }
             const date_text = {
+                Hour_lower: date_utils.format(date, 'HH', this.options.language),
                 'Quarter Day_lower': date_utils.format(
                     date,
                     'HH',
@@ -1538,6 +1549,10 @@ var Gantt = (function () {
                         : date_utils.format(date, 'D', this.options.language),
                 Month_lower: date_utils.format(date, 'MMMM', this.options.language),
                 Year_lower: date_utils.format(date, 'YYYY', this.options.language),
+                Hour_upper:
+                    date.getDate() !== last_date.getDate()
+                        ? date_utils.format(date, 'D MMM', this.options.language)
+                        : '',
                 'Quarter Day_upper':
                     date.getDate() !== last_date.getDate()
                         ? date_utils.format(date, 'D MMM', this.options.language)
@@ -1577,11 +1592,13 @@ var Gantt = (function () {
             };
 
             const x_pos = {
+                Hour_lower: (this.options.column_width * 24) / 2,
                 'Quarter Day_lower': (this.options.column_width * 4) / 2,
                 'Quarter Day_upper': 0,
                 'Half Day_lower': (this.options.column_width * 2) / 2,
                 'Half Day_upper': 0,
                 Day_lower: this.options.column_width / 2,
+                Hour_upper: 0,
                 Day_upper: (this.options.column_width * 30) / 2,
                 Week_lower: 0,
                 Week_upper: (this.options.column_width * 4) / 2,
