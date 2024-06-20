@@ -281,6 +281,7 @@ export default class Gantt {
         this.setup_layers();
         this.make_grid();
         this.make_dates();
+        this.make_grid_header();
         this.make_bars();
         this.make_arrows();
         this.map_arrows_on_bars();
@@ -290,7 +291,7 @@ export default class Gantt {
 
     setup_layers() {
         this.layers = {};
-        const layers = ['grid', 'date', 'arrow', 'progress', 'bar', 'details'];
+        const layers = ['grid', 'arrow', 'progress', 'bar', 'header', 'date', 'details'];
         // make group layers
         for (let layer of layers) {
             this.layers[layer] = createSVG('g', {
@@ -303,7 +304,6 @@ export default class Gantt {
     make_grid() {
         this.make_grid_background();
         this.make_grid_rows();
-        this.make_grid_header();
         this.make_grid_ticks();
         this.make_grid_highlights();
     }
@@ -372,7 +372,7 @@ export default class Gantt {
             width: header_width,
             height: header_height,
             class: 'grid-header',
-            append_to: this.layers.grid,
+            append_to: this.layers.header,
         });
     }
 
