@@ -652,6 +652,8 @@ export default class Gantt {
     }
 
     bind_grid_click() {
+        let is_dragging = false;
+        let x_on_start = 0;
         $.on(
             this.$svg,
             this.options.popup_trigger,
@@ -661,6 +663,32 @@ export default class Gantt {
                 this.hide_popup();
             }
         );
+        $.on(this.$svg, 'mousedown', '.grid-row, .today-highlight', e => {
+            is_dragging = true;
+            x_on_start = e.offsetX;
+            if (this.$svg.parentElement) {
+                this.$svg.parentElement.style.cursor = 'move';
+            }
+        });
+        $.on(this.$svg, 'mousemove', '.grid-row, .today-highlight', e => {
+            if (!is_dragging) {
+                return;
+            }
+            const dx = e.offsetX - x_on_start;
+            const parent_element = this.$svg.parentElement;
+            if (!parent_element) return;
+            parent_element.style.cursor = 'move';
+            parent_element.scrollLeft += dx / 1.5;
+            x_on_start = e.offsetX;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (this.$svg.parentElement) {
+                this.$svg.parentElement.style.cursor = 'default';
+            }
+            is_dragging = false;
+            x_on_start = 0;
+        });
     }
 
     bind_bar_events() {
