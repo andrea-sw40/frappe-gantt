@@ -1106,6 +1106,7 @@ export default class Gantt {
                 is_resizing_right = true;
                 element.classList.add('visible');
             } else if (element.classList.contains('bar-wrapper')) {
+                if (element.classList.contains('bar-not-draggable')) return;
                 is_dragging = true;
             }
 

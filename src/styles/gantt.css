@@ -336,5 +336,9 @@
                 display: block;
             }
         }
+
+        &.bar-not-draggable {
+            cursor: not-allowed;
+        }
     }
 }

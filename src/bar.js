@@ -17,6 +17,9 @@ export default class Bar {
         } else {
             this.group.classList = ['bar-wrapper'];
         }
+        if (this.disable_move) {
+            this.group.classList.add('bar-not-draggable');
+        }
 
         this.prepare_values();
         this.draw();
@@ -34,7 +37,7 @@ export default class Bar {
         this.group = createSVG('g', {
             class:
                 'bar-wrapper' +
-                (this.task.custom_class ? ' ' + this.task.custom_class : ''),
+                (this.task.custom_class ? ' ' + this.task.custom_class : '') + (this.task.disable_move ? ' bar-not-draggable' : ''),
             'data-id': this.task.id,
         });
         this.bar_group = createSVG('g', {
@@ -48,6 +51,9 @@ export default class Bar {
     }
 
     prepare_values() {
+        this.disable_resize = this.task.disable_resize;
+        this.disable_move = this.task.disable_move;
+
         this.invalid = this.task.invalid;
         this.height = this.gantt.options.bar_height;
         this.image_size = this.height - 5;
@@ -274,7 +280,7 @@ export default class Bar {
     }
 
     draw_resize_handles() {
-        if (this.invalid || this.gantt.options.readonly) return;
+        if (this.invalid || this.gantt.options.readonly || this.disable_resize) return;
 
         const bar = this.$bar;
         const handle_width = 3;
